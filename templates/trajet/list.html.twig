@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<table class="table text-center">
+		<tr>
+			<th class="active text-center">Lieu départ</th>
+            <th class="active text-center">Lieu arrivé</th>
+			<th class="active text-center">Date départ</th>
+            <th class="active text-center">Date arrivé</th>
+			<th class="active text-center">prix</th>
+		</tr>
+
+		{% for trajet in trajets %}
+			<tr>
+				<td>
+					{{ trajet.lieuDepart }}
+				</td>
+                <td>
+					{{ trajet.lieuArrive }}
+				</td>
+				<td>
+					{{ trajet.dateDepart }}
+				</td>
+                <td>
+					{{ trajet.dateArrive }}
+				</td>
+                <td>
+					{{ trajet.prix }}
+				</td>
+			</tr>
+		{% endfor %}
+	</table>
+{% endblock %}
