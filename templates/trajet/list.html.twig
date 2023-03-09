@@ -4,9 +4,9 @@
 	<table class="table text-center">
 		<tr>
 			<th class="active text-center">Lieu départ</th>
-            <th class="active text-center">Lieu arrivé</th>
+			<th class="active text-center">Lieu arrivé</th>
 			<th class="active text-center">Date départ</th>
-            <th class="active text-center">Date arrivé</th>
+			<th class="active text-center">Date arrivé</th>
 			<th class="active text-center">prix</th>
 		</tr>
 
@@ -15,17 +15,19 @@
 				<td>
 					{{ trajet.lieuDepart }}
 				</td>
-                <td>
+				<td>
 					{{ trajet.lieuArrive }}
 				</td>
 				<td>
 					{{ trajet.dateDepart }}
 				</td>
-                <td>
+				<td>
 					{{ trajet.dateArrive }}
 				</td>
-                <td>
-					{{ trajet.prix }}
+				<td>
+					<a href="{{ path('trajet.show', {id: trajet.id}) }}">
+						<div style="height:100%;width:100%">{{ trajet.prix }}</div>
+					</a>
 				</td>
 			</tr>
 		{% endfor %}

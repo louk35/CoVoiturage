@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<h1>Détails du trajet à pourvoir :</h1>
+	<h3 class="media-heading">
+		<strong>{{ trajet.lieuDepart }}</strong>
+		-
+		<strong>{{ trajet.lieuArrive }}
+		</strong>
+		<div class="media" style="margin-top: 60px;">
+			<div class="media-body">
+				<div class="row">
+					<div class="col-sm-2">
+						<i class="pull-right">Publié le
+							{{ trajet.dateCreation|date('m/d/Y') }}</i>
+					</div>
+
+				</div>
+
+				<p>{{ trajet.description|nl2br }}</p>
+
+				<p>
+					<strong>Email de contact :</strong>
+					faire lien avec conducteur
+				</p>
+				<p>
+					<strong>Date de départ :</strong>
+					{{ trajet.dateDepart}}
+				</p>
+				<p>
+					<strong>Covoitureur(s):
+						<strong></p>
+						{#
+						<table class="table">
+						<thead>
+						<tr>
+						<th>Nom</th>
+						<th>Prénom</th>
+						<th>Âge</th>
+						</tr>
+						</thead>
+						<tbody>
+						{% for tuteur in stage.tuteurs %}
+						<tr>
+						<td>
+						<a href="#">{{ tuteur.nom }}</a>
+						</td>
+						<td>{{ tuteur.prenom }}</td>
+						<td>{{ tuteur.email }}</td>
+						<td>{{ tuteur.telephone }}</td>
+						</tr>
+						{% endfor %}
+						</tbody>
+						</table>
+						#}
+						<div class="row">
+							<div class="col-sm-8 text-right">
+								<a class="btn btn-default" href="{{ path('trajet.list')}}">
+									<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
+									Retour
+								</a>
+
+								<a class="btn btn-primary" href="#">
+									<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+									Réserver
+								</a>
+							</div>
+						</div>
+					</p>
+				</p>
+			</div>
+
+		</div>
+
+	{% endblock %}

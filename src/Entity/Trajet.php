@@ -8,11 +8,28 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * 
+ * @ORM\Entity()
+ * @ORM\Table(name="Trajet")
+ * @ORM\HasLifecycleCallbacks() 
  * @ORM\Entity(repositoryClass=TrajetRepository::class)
  */
 class Trajet
 {
+    /**
+     * @ORM\PrePersist()
+     */
+    public function prePersist()
+    {
+        $this->date_creation = new \DateTime();
+        $this->date_modification = new \DateTime();
+    }
+    /**
+     * @ORM\PreUpdate()
+     */
+    public function preUpdate()
+    {
+        $this->date_modification = new \DateTime();
+    }
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -64,6 +81,21 @@ class Trajet
      * @ORM\ManyToMany(targetEntity=User::class, inversedBy="reservation")
      */
     private $passagers;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $description;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $date_creation;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $date_modification;
 
     public function __construct()
     {
@@ -191,6 +223,42 @@ class Trajet
     public function removePassager(User $passager): self
     {
         $this->passagers->removeElement($passager);
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getDateCreation(): ?\DateTimeInterface
+    {
+        return $this->date_creation;
+    }
+
+    public function setDateCreation(\DateTimeInterface $date_creation): self
+    {
+        $this->date_creation = $date_creation;
+
+        return $this;
+    }
+
+    public function getDateModification(): ?\DateTimeInterface
+    {
+        return $this->date_modification;
+    }
+
+    public function setDateModification(\DateTimeInterface $date_modification): self
+    {
+        $this->date_modification = $date_modification;
 
         return $this;
     }
