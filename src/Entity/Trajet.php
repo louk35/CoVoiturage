@@ -3,33 +3,16 @@
 namespace App\Entity;
 
 use App\Repository\TrajetRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity()
  * @ORM\Table(name="Trajet")
- * @ORM\HasLifecycleCallbacks() 
+ * @ORM\HasLifecycleCallbacks()
  * @ORM\Entity(repositoryClass=TrajetRepository::class)
  */
 class Trajet
 {
-    /**
-     * @ORM\PrePersist()
-     */
-    public function prePersist()
-    {
-        $this->date_creation = new \DateTime();
-        $this->date_modification = new \DateTime();
-    }
-    /**
-     * @ORM\PreUpdate()
-     */
-    public function preUpdate()
-    {
-        $this->date_modification = new \DateTime();
-    }
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -48,12 +31,12 @@ class Trajet
     private $lieuArrive;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="datetime")
      */
     private $dateDepart;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="datetime")
      */
     private $dateArrive;
 
@@ -70,17 +53,7 @@ class Trajet
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $nbPlace;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="trajets")
-     */
-    private $conducteur;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="reservation")
-     */
-    private $passagers;
+    private $nbplace;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -88,19 +61,19 @@ class Trajet
     private $description;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $date_creation;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $date_modification;
 
-    public function __construct()
-    {
-        $this->passagers = new ArrayCollection();
-    }
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $date_expiration;
 
     public function getId(): ?int
     {
@@ -131,24 +104,24 @@ class Trajet
         return $this;
     }
 
-    public function getDateDepart(): ?string
+    public function getDateDepart(): ?\DateTimeInterface
     {
         return $this->dateDepart;
     }
 
-    public function setDateDepart(string $dateDepart): self
+    public function setDateDepart(\DateTimeInterface $dateDepart): self
     {
         $this->dateDepart = $dateDepart;
 
         return $this;
     }
 
-    public function getDateArrive(): ?string
+    public function getDateArrive(): ?\DateTimeInterface
     {
         return $this->dateArrive;
     }
 
-    public function setDateArrive(string $dateArrive): self
+    public function setDateArrive(\DateTimeInterface $dateArrive): self
     {
         $this->dateArrive = $dateArrive;
 
@@ -179,50 +152,14 @@ class Trajet
         return $this;
     }
 
-    public function getNbPlace(): ?string
+    public function getNbplace(): ?string
     {
-        return $this->nbPlace;
+        return $this->nbplace;
     }
 
-    public function setNbPlace(string $nbPlace): self
+    public function setNbplace(string $nbplace): self
     {
-        $this->nbPlace = $nbPlace;
-
-        return $this;
-    }
-
-    public function getConducteur(): ?User
-    {
-        return $this->conducteur;
-    }
-
-    public function setConducteur(?User $conducteur): self
-    {
-        $this->conducteur = $conducteur;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, User>
-     */
-    public function getPassagers(): Collection
-    {
-        return $this->passagers;
-    }
-
-    public function addPassager(User $passager): self
-    {
-        if (!$this->passagers->contains($passager)) {
-            $this->passagers[] = $passager;
-        }
-
-        return $this;
-    }
-
-    public function removePassager(User $passager): self
-    {
-        $this->passagers->removeElement($passager);
+        $this->nbplace = $nbplace;
 
         return $this;
     }
@@ -244,7 +181,7 @@ class Trajet
         return $this->date_creation;
     }
 
-    public function setDateCreation(\DateTimeInterface $date_creation): self
+    public function setDateCreation(?\DateTimeInterface $date_creation): self
     {
         $this->date_creation = $date_creation;
 
@@ -256,10 +193,41 @@ class Trajet
         return $this->date_modification;
     }
 
-    public function setDateModification(\DateTimeInterface $date_modification): self
+    public function setDateModification(?\DateTimeInterface $date_modification): self
     {
         $this->date_modification = $date_modification;
 
         return $this;
     }
+    /**
+     * @ORM\PrePersist()
+     */
+    public function prePersist()
+    {
+        $this->date_creation = new \DateTime();
+        $this->date_modification = new \DateTime();
+        if (!$this->date_expiration) {
+            $this->date_expiration = (clone $this->date_creation)->modify('+5 days');
+        }
+    }
+    /**
+     * @ORM\PreUpdate()
+     */
+    public function preUpdate()
+    {
+        $this->date_modification = new \DateTime();
+    }
+
+    public function getDateExpiration(): ?\DateTimeInterface
+    {
+        return $this->date_expiration;
+    }
+
+    public function setDateExpiration(?\DateTimeInterface $date_expiration): self
+    {
+        $this->date_expiration = $date_expiration;
+
+        return $this;
+    }
+
 }

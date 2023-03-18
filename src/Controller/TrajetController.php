@@ -2,10 +2,14 @@
 
 namespace App\Controller;
 
+use App\Form\TrajetType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Trajet;
+use App\Repository\TrajetRepository;
+use Symfony\Component\HttpFoundation\Request;
+use Doctrine\ORM\EntityManagerInterface;
 
 class TrajetController extends AbstractController
 {
@@ -21,6 +25,7 @@ class TrajetController extends AbstractController
             'trajets' => $trajets,
         ]);
     }
+
     /**
      * Chercher et afficher un trajet.
      * @Route("/trajet/{id}", name="trajet.show", requirements={"id" = "\d+"})
@@ -33,4 +38,26 @@ class TrajetController extends AbstractController
             'trajet' => $trajet,
         ]);
     }
+    /**
+     * Créer un nouveau trajet.
+     * @Route("/nouveau-trajet", name="trajet.create")
+     * @param Request $request
+     * @param EntityManagerInterface $em
+     * @return RedirectResponse|Response
+     */
+    public function create(Request $request, EntityManagerInterface $em) : Response
+    {
+        $trajet = new Trajet();
+        $form = $this->createForm(TrajetType::class, $trajet);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($trajet);
+            $em->flush();
+            return $this->redirectToRoute('trajet.list');
+        }
+        return $this->render('trajet/create.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
 }

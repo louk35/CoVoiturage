@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+
 use App\Entity\Trajet;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
@@ -33,6 +34,17 @@ class TrajetRepository extends ServiceEntityRepository
         if ($flush) {
             $this->_em->flush();
         }
+    }
+    /**
+     * @return Trajet[]
+     */
+    public function getTrajetssNonExpires()
+    {
+        $qb = $this->createQueryBuilder('s')
+            ->where('s.date_expiration > :date')
+            ->setParameter('date', new \DateTime())
+            ->orderBy('s.date_creation', 'DESC');
+        return $qb->getQuery()->getResult();
     }
 
     /**
