@@ -27,16 +27,8 @@ class TrajetType extends AbstractType
             new Length(['max' => 255]),
         ]
     ])
-            ->add('dateDepart', DateTimeType::class,[
-                'constraints' => [new NotBlank(),
-                    new Length(['max' => 255]),
-                ]
-            ])
-            ->add('dateArrive', DateTimeType::class,[
-                'constraints' => [new NotBlank(),
-                    new Length(['max' => 255]),
-                ]
-            ])
+            ->add('dateDepart', DateTimeType::class)
+            ->add('dateArrive', DateTimeType::class)
             ->add('prix', TextType::class,[
                 'constraints' => [new NotBlank(),
                     new Length(['max' => 255]),
