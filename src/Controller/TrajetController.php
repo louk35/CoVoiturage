@@ -10,6 +10,8 @@ use App\Entity\Trajet;
 use App\Repository\TrajetRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+
 
 class TrajetController extends AbstractController
 {
@@ -44,6 +46,8 @@ class TrajetController extends AbstractController
      * @param Request $request
      * @param EntityManagerInterface $em
      * @return RedirectResponse|Response
+     * Require ROLE_USER for  method create in this class
+     * @IsGranted("ROLE_USER")
      */
     public function create(Request $request, EntityManagerInterface $em) : Response
     {
