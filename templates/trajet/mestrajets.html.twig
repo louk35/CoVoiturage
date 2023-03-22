@@ -9,7 +9,7 @@
             <th class="active text-center">Date arrivé</th>
             <th class="active text-center">prix</th>
         </tr>
-        {% if trajets |length >0 %}
+
         {% for trajet in trajets %}
             <tr>
                 <td>
@@ -31,8 +31,5 @@
                 </td>
             </tr>
         {% endfor %}
-        {% else %}
-        <h1>Aucun Trajet Disponible pour votre Recherche</h1>
-        {% endif %}
     </table>
 {% endblock %}

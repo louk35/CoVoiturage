@@ -28,6 +28,18 @@ class TrajetController extends AbstractController
             'trajets' => $trajets,
         ]);
     }
+    /**
+     * Lister les trajets creer.
+     * @Route("/trajet-creer/", name="trajet.creer")
+     * @return Response
+     */
+    public function creer(): Response
+    {
+        $trajets = $this->getDoctrine()->getRepository(Trajet::class)->findAll();
+        return $this->render('trajet/mestrajets.html.twig', [
+            'trajets' => $trajets,
+        ]);
+    }
 
     /**
      * Chercher et afficher un trajet.
@@ -58,7 +70,7 @@ class TrajetController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $em->persist($trajet);
             $em->flush();
-            return $this->redirectToRoute('trajet.list');
+            return $this->redirectToRoute('trajet.creer');
         }
         return $this->render('trajet/create.html.twig', [
             'form' => $form->createView(),
@@ -76,23 +88,18 @@ class TrajetController extends AbstractController
         $trajet = new Trajet();
         $form = $this->createForm(RechercheType::class, $trajet);
         $form->handleRequest($request);
+        $trajets = [];
+
         if ($form->isSubmitted() && $form->isValid()) {
             $lieuDepart = $trajet->getLieuDepart();
             $lieuArrive = $trajet->getLieuArrive();
             $dateDepart =$trajet->getDateDepart();
-            if (($lieuDepart != "") && ($lieuArrive != "") && ($dateDepart != "")){
-                $trajets = $this->getDoctrine()->getRepository(Trajet::class)->findBy([
-                    'lieuDepart' => $lieuDepart,
-                    'lieuArrive' => $lieuArrive,
-                    'dateDepart' => $dateDepart,
-                ]);
-                return $this ->render('trajet/search_results.html.twig',  [
+
+            if (($lieuDepart != "") && ($lieuArrive != "") && ($dateDepart != "")) {
+                $trajets = $this->getDoctrine()->getRepository(Trajet::class)->findByDate($lieuDepart, $lieuArrive, $dateDepart);
+                return $this->render('trajet/search_results.html.twig', [
                     'trajets' => $trajets,]);
             }
-            else {
-                $trajets = $this->getDoctrine()->getRepository(Trajet::class)->findAll;
-            }
-
         }
         return $this->render('trajet/search.html.twig', [
             'form' => $form->createView(),
