@@ -59,14 +59,14 @@ class TrajetRepository extends ServiceEntityRepository
         }
     }
 
-    // /**
-    //  * @return Trajet[] Returns an array of Trajet objects
+    /**
+    * @return Trajet[] Returns an array of Trajet objects
     //  */
     /*
-    public function findByExampleField($value)
+    public function findByExampleField($lieuDepart,$lieuArrive,$dateDepart)
     {
         return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
+            ->andWhere('t.dateDepart = :val')
             ->setParameter('val', $value)
             ->orderBy('t.id', 'ASC')
             ->setMaxResults(10)
@@ -74,7 +74,7 @@ class TrajetRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
-    */
+
 
     /*
     public function findOneBySomeField($value): ?Trajet

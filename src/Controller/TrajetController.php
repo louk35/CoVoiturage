@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Form\RechercheType;
 use App\Form\TrajetType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -63,5 +64,40 @@ class TrajetController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+    /**
+     * page d'accueil.
+     * @param Request $request
+     * @param EntityManagerInterface $em
+     * @return RedirectResponse|Response
+     * @Route("/", name="trajet.search")
+     */
+    public function search(Request $request, EntityManagerInterface $em) : Response
+    {
+        $trajet = new Trajet();
+        $form = $this->createForm(RechercheType::class, $trajet);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $lieuDepart = $trajet->getLieuDepart();
+            $lieuArrive = $trajet->getLieuArrive();
+            $dateDepart =$trajet->getDateDepart();
+            if (($lieuDepart != "") && ($lieuArrive != "") && ($dateDepart != "")){
+                $trajets = $this->getDoctrine()->getRepository(Trajet::class)->findBy([
+                    'lieuDepart' => $lieuDepart,
+                    'lieuArrive' => $lieuArrive,
+                    'dateDepart' => $dateDepart,
+                ]);
+                return $this ->render('trajet/search_results.html.twig',  [
+                    'trajets' => $trajets,]);
+            }
+            else {
+                $trajets = $this->getDoctrine()->getRepository(Trajet::class)->findAll;
+            }
+
+        }
+        return $this->render('trajet/search.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
 
 }

@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <table class="table text-center">
+        <tr>
+            <th class="active text-center">Lieu départ</th>
+            <th class="active text-center">Lieu arrivé</th>
+            <th class="active text-center">Date départ</th>
+            <th class="active text-center">Date arrivé</th>
+            <th class="active text-center">prix</th>
+        </tr>
+
+        {% for trajet in trajets %}
+            <tr>
+                <td>
+                    {{ trajet.lieuDepart }}
+                </td>
+                <td>
+                    {{ trajet.lieuArrive }}
+                </td>
+                <td>
+                    {{ trajet.dateDepart.format('Y-m-d H:i:s') }}
+                </td>
+                <td>
+                    {{ trajet.dateArrive.format('Y-m-d H:i:s') }}
+                </td>
+                <td>
+                    <a href="{{ path('trajet.show', {id: trajet.id}) }}">
+                        <div style="height:100%;width:100%">{{ trajet.prix }}</div>
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
