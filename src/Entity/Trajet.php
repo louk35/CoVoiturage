@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\TrajetRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -74,6 +76,22 @@ class Trajet
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $date_expiration;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="trajets")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $conducteur;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="reservations")
+     */
+    private $passagers;
+
+    public function __construct()
+    {
+        $this->passagers = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -226,6 +244,42 @@ class Trajet
     public function setDateExpiration(?\DateTimeInterface $date_expiration): self
     {
         $this->date_expiration = $date_expiration;
+
+        return $this;
+    }
+
+    public function getConducteur(): ?User
+    {
+        return $this->conducteur;
+    }
+
+    public function setConducteur(?User $conducteur): self
+    {
+        $this->conducteur = $conducteur;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getPassagers(): Collection
+    {
+        return $this->passagers;
+    }
+
+    public function addPassager(User $passager): self
+    {
+        if (!$this->passagers->contains($passager)) {
+            $this->passagers[] = $passager;
+        }
+
+        return $this;
+    }
+
+    public function removePassager(User $passager): self
+    {
+        $this->passagers->removeElement($passager);
 
         return $this;
     }

@@ -12,6 +12,7 @@ use App\Repository\TrajetRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Core\Security;
 
 
 class TrajetController extends AbstractController
@@ -30,15 +31,43 @@ class TrajetController extends AbstractController
     }
     /**
      * Lister les trajets creer.
-     * @Route("/trajet-creer/", name="trajet.creer")
+     * @Route("/mes-trajets/", name="mes.trajets")
      * @return Response
+     * @param Security $security
+     * @return RedirectResponse|Response
+     * Require ROLE_USER for  method create in this class
+     * @IsGranted("ROLE_USER")
      */
-    public function creer(): Response
+    public function list_mes_trajets(Security $security): Response
     {
-        $trajets = $this->getDoctrine()->getRepository(Trajet::class)->findAll();
+        $user = $security->getUser();
+        $trajets = $this->getDoctrine()->getRepository(Trajet::class)->findBy(['conducteur' => $user]);
         return $this->render('trajet/mestrajets.html.twig', [
             'trajets' => $trajets,
         ]);
+    }
+    /**
+     * Éditer un stage.
+     * @Route("mes-trajets/{id}/edit", name="mes.trajets.edit")
+     * @return Response
+     * @param Request $request
+     * @param Security $security
+     * @param EntityManagerInterface $em
+     * @return RedirectResponse|Response
+     * Require ROLE_USER for  method create in this class
+     * @IsGranted("ROLE_USER")
+     */
+    public function edit(Request $request, Trajet $trajet, EntityManagerInterface $em) : Response
+    {
+    $form = $this->createForm(TrajetType::class, $trajet);
+    $form->handleRequest($request);
+    if ($form->isSubmitted() && $form->isValid()) {
+        $em->flush();
+        return $this->redirectToRoute('mes.trajets');
+    }
+    return $this->render('trajet/create.html.twig', [
+         'form' => $form->createView(),
+    ]);
     }
 
     /**
@@ -53,29 +82,34 @@ class TrajetController extends AbstractController
             'trajet' => $trajet,
         ]);
     }
-    /**
-     * Créer un nouveau trajet.
-     * @Route("/nouveau-trajet", name="trajet.create")
-     * @param Request $request
-     * @param EntityManagerInterface $em
-     * @return RedirectResponse|Response
-     * Require ROLE_USER for  method create in this class
-     * @IsGranted("ROLE_USER")
-     */
-    public function create(Request $request, EntityManagerInterface $em) : Response
-    {
-        $trajet = new Trajet();
-        $form = $this->createForm(TrajetType::class, $trajet);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em->persist($trajet);
-            $em->flush();
-            return $this->redirectToRoute('trajet.creer');
+/**
+ * Créer un nouveau trajet.
+ * @Route("/nouveau-trajet", name="trajet.create")
+ * @param Request $request
+ * @param EntityManagerInterface $em
+ * @param Security $security
+ * @return RedirectResponse|Response
+ * Require ROLE_USER for  method create in this class
+ * @IsGranted("ROLE_USER")
+ */
+public function create(Request $request, EntityManagerInterface $em, Security $security) : Response
+{
+    $trajet = new Trajet();
+    $form = $this->createForm(TrajetType::class, $trajet);
+    $form->handleRequest($request);
+    if ($form->isSubmitted() && $form->isValid()) {
+        $user = $security->getUser();
+        if ($user) {
+            $trajet->setConducteur($user);
         }
-        return $this->render('trajet/create.html.twig', [
-            'form' => $form->createView(),
-        ]);
+        $em->persist($trajet);
+        $em->flush();
+        return $this->redirectToRoute('mes.trajets');
     }
+    return $this->render('trajet/create.html.twig', [
+        'form' => $form->createView(),
+    ]);
+}
     /**
      * page d'accueil.
      * @param Request $request
