@@ -47,7 +47,7 @@ class TrajetController extends AbstractController
         ]);
     }
     /**
-     * Éditer un stage.
+     * Éditer un trajet à vous.
      * @Route("mes-trajets/{id}/edit", name="mes.trajets.edit")
      * @return Response
      * @param Request $request
@@ -59,15 +59,44 @@ class TrajetController extends AbstractController
      */
     public function edit(Request $request, Trajet $trajet, EntityManagerInterface $em) : Response
     {
-    $form = $this->createForm(TrajetType::class, $trajet);
-    $form->handleRequest($request);
-    if ($form->isSubmitted() && $form->isValid()) {
+        $form = $this->createForm(TrajetType::class, $trajet);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->flush();
+            return $this->redirectToRoute('mes.trajets');
+        }
+        return $this->render('trajet/create.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+    /**
+     * Supprimer un trajet à vous.
+     * @Route("mes-trajets/{id}/delete", name="mes.trajets.delete")
+     * @return Response
+     * @param Request $request
+     * @param Security $security
+     * @param Trajet $trajet
+     * @param EntityManagerInterface $em
+     * @return RedirectResponse|Response
+     * Require ROLE_USER for  method create in this class
+     * @IsGranted("ROLE_USER")
+     */
+    public function delete(Request $request, Trajet $trajet, EntityManagerInterface $em) : Response
+    {
+        $form = $this->createFormBuilder()
+        ->setAction($this->generateUrl('mes.trajets.delete', ['id' => $trajet->getId()]))
+        ->getForm();
+        $form->handleRequest($request);
+        if ( ! $form->isSubmitted() || ! $form->isValid()) {
+                return $this->render('trajet/delete.html.twig', [
+                'trajet' => $trajet,
+                'form' => $form->createView(),
+            ]);
+        }
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($trajet);
         $em->flush();
         return $this->redirectToRoute('mes.trajets');
-    }
-    return $this->render('trajet/create.html.twig', [
-         'form' => $form->createView(),
-    ]);
     }
 
     /**
