@@ -64,14 +64,14 @@ class User implements UserInterface
     private $trajets;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Trajet::class, mappedBy="passagers")
+     * @ORM\ManyToOne(targetEntity=Reservation::class, inversedBy="passager")
      */
     private $reservations;
 
     public function __construct()
     {
         $this->trajets = new ArrayCollection();
-        $this->reservations = new ArrayCollection();
+       
     }
 
     public function getId(): ?int
@@ -233,30 +233,16 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Trajet>
-     */
-    public function getReservations(): Collection
+    public function getReservations(): ?Reservation
     {
         return $this->reservations;
     }
 
-    public function addReservation(Trajet $reservation): self
+    public function setReservations(?Reservation $reservations): self
     {
-        if (!$this->reservations->contains($reservation)) {
-            $this->reservations[] = $reservation;
-            $reservation->addPassager($this);
-        }
+        $this->reservations = $reservations;
 
         return $this;
     }
 
-    public function removeReservation(Trajet $reservation): self
-    {
-        if ($this->reservations->removeElement($reservation)) {
-            $reservation->removePassager($this);
-        }
-
-        return $this;
-    }
 }
