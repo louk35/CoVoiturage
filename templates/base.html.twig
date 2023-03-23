@@ -5,35 +5,42 @@
 			{% block title %}Application covoiturage
 			{% endblock %}
 		</title>
-
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> {% block stylesheets %}{% endblock %}{% block javascripts %}{% endblock %}
-
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+		<style>
+
+		body {
+			background-color: #E8E8E8;
+		}
+
+</style>
 	</head>
-	<body>
-		<nav class="navbar navbar-default">
+	<body class="bg-">
+		<nav class="navbar navbar-inverse">
 			<div class="container-fluid">
 				<div class="navbar-header">
 
-					<a class="navbar-brand" href="{{ path('trajet.search') }}">Home</a>
+					<a class="navbar-brand" href="{{ path('trajet.search') }}">CoVoit'</a>
 				</div>
 
 				<div class="collapse navbar-collapse">
 					<ul class="nav navbar-nav navbar-right">
 						<li>
 							<div>
-								<a class="navbar-brand" href="{{ path('trajet.list') }}">Trajets</a>
-								<a href="{{ path('trajet.create') }}" class="btn btn-default navbar-btn">Créer un trajet</a>
-								<a class="navbar-brand" href="{{ path('mes.trajets') }}">Mes annonces</a>
-							</div>
+								<a class="navbar-brand" href="{{ path('trajet.list'|trans) }}">Trajets</a>
+								<a href="{{ path('trajet.create'|trans) }}" class="btn btn-success navbar-btn">Créer un trajet</a>
+								<a class="navbar-brand" href="{{ path('mes.reservations'|trans) }}">Mes réservations</a>
+								<a class="navbar-brand" href="{{ path('mes.trajets'|trans) }}">Mes Annonces</a>
+															</div>
 							{% if not app.user %}
 								<li>
-									<a href="{{ path('app_login') }}">Connexion</a>
+									<a class="btn btn-secondary"href="{{ path('app_login'|trans) }}">Connexion</a>
 								</li>
 							{% endif %}
 							{% if app.user %}
 								<li>
-									<a href="{{ path('app_logout') }}">Déconnexion</a>
+									<a class="btn btn-secondary" href="{{ path('app_logout'|trans) }}">Déconnexion</a>
 								</li>
 							{% endif %}
 						</li>

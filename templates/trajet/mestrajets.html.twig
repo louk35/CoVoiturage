@@ -12,6 +12,8 @@
 				<th class="active text-center">Date départ</th>
 				<th class="active text-center">Date arrivé</th>
 				<th class="active text-center">prix</th>
+				<th class="active text-center"> </th>
+				<th class="active text-center"> </th>
 			</tr>
 
 			{% for trajet in trajets %}
@@ -33,6 +35,16 @@
 							<div style="height:100%;width:100%">{{ trajet.prix }}</div>
 						</a>
 					</td>
+					<td>
+					<a href="{{ path('mes.trajets.edit', {id: trajet.id}) }}" class="btn btn-info ">
+						<i class="fas fa-edit"></i>
+						edit</a>
+				</td>
+				<td>
+					<a href="{{ path('mes.trajets.delete', {id: trajet.id}) }}" class="btn btn-danger ">
+						<i class="fas fa-danger"></i>
+						supprimer</a>
+				</td>
 				</tr>
 			{% endfor %}
 		</table>

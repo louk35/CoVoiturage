@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<h1>Détails du trajet à pourvoir :</h1>
+	<h3 class="media-heading">
+		<strong>{{ reservation.trajet.lieuDepart }}</strong>
+		-
+		<strong>{{ reservation.trajet.lieuArrive }}
+		</strong>
+		<div class="media" style="margin-top: 60px;">
+			<div class="media-body">
+				<p>{{ reservation.trajet.description|nl2br }}</p>
+				<p>
+					<strong>Publié par :</strong>
+					{{ reservation.trajet.conducteur.nom }}
+					{{ reservation.trajet.conducteur.prenom }}
+				</p>
+
+				<p>
+					<strong>Email de contact :</strong>
+					{{ reservation.trajet.conducteur.email }}
+				</p>
+				<p>
+					<strong>Date de départ :</strong>
+					{{ reservation.trajet.dateDepart.format('Y-m-d H:i:s')}}
+				</p>
+				<p>
+					<strong>Arrivée prévu :</strong>
+					{{ reservation.trajet.dateArrive.format('Y-m-d H:i:s')}}
+				</p>
+				<p>
+					<strong>Covoitureur(s):
+						<strong></p>
+
+						<div class="row">
+							<div class="col-sm-8 text-right">
+								<a class="btn btn-default" href="{{ path('mes.reservations')}}">
+									<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
+									Retour
+								</a>
+								 {% if app.user is not null %}
+										<a href="{{ path('mes.reservations.delete', {id: reservation.id}) }}" class="btn btn-danger">
+											<i class="fas fa-trash"></i>
+											Supprimer cette réservation</a>
+								{% endif %} 
+
+							</div>
+						</div>
+					</p>
+				</p>
+			</div>
+
+		</div>
+
+	{% endblock %}

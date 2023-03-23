@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+ <div class="d-flex justify-content-center">
+	{% if reservations is not empty %}
+		<h1>
+			Voici vos réservations !
+		</h1>
+		 <table class="table text-center">
+			<tr>
+				<th class="active text-center">Lieu départ</th>
+				<th class="active text-center">Lieu arrivé</th>
+				<th class="active text-center">Date départ</th>
+				<th class="active text-center">Date arrivé</th>
+                <th class="active text-center"> </th>
+			</tr>
+
+			{% for reservation in reservations %}
+				<tr>
+					<td>
+						{{ reservation.trajet.lieuDepart }}
+					</td>
+					<td>
+						{{ reservation.trajet.lieuArrive }}
+					</td>
+					<td>
+						{{ reservation.trajet.dateDepart.format('Y-m-d H:i:s') }}
+					</td>
+					<td>
+						{{ reservation.trajet.dateDepart.format('Y-m-d H:i:s') }}
+					</td>
+					<td>
+						
+					<a href="{{ path('reservation.show', {id: reservation.id}) }}" class="btn btn-info ">
+						<i class="fas fa-edit"></i>
+						Plus de détail</a>
+
+					</td>
+				</tr>
+			{% endfor %}
+		</table> 
+
+	{% else %}
+		<h1>
+			Pas encore de réservation
+		</h1>
+        <a href="{{ path('trajet.search')}}" class="btn btn-info ">
+						<i class="fas fa-edit"></i>
+						Chercher une annonce</a>
+	{% endif %}
+	</div>
+{% endblock %}

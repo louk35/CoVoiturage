@@ -94,6 +94,7 @@ class Trajet
     }
 
 
+
     public function getId(): ?int
     {
         return $this->id;

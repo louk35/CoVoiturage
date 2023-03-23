@@ -1,15 +1,17 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1> Ayez un trajet à un prix moins chère</h1>
+<div class="d-flex justify-content-center">
+    <h1> Chercher un trajet !</h1>
 
     {{ form_start(form) }}
     {{ form_widget(form) }}
 
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-default">Rechercher</button>
+            <button type="submit" class="btn btn-primary">Rechercher</button>
         </div>
     </div>
     {{ form_end(form) }}
+    </div>
 {% endblock %}

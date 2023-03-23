@@ -1,10 +1,11 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+ <div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
 	<h1>
 		Tous les trajets existant !
 	</h1>
-	<table class="table text-center">
+	<table class="table text-center table-dark">
 		<tr>
 			<th class="active text-center">Lieu départ</th>
 			<th class="active text-center">Lieu arrivé</th>
@@ -41,4 +42,5 @@
 			</tr>
 		{% endfor %}
 	</table>
+	</div>
 {% endblock %}

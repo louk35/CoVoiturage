@@ -64,13 +64,16 @@ class User implements UserInterface
     private $trajets;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Reservation::class, inversedBy="passager")
+     * @ORM\OneToMany(targetEntity=Reservation::class, mappedBy="passager")
      */
     private $reservations;
+
+
 
     public function __construct()
     {
         $this->trajets = new ArrayCollection();
+        $this->reservations = new ArrayCollection();
        
     }
 
@@ -233,14 +236,32 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getReservations(): ?Reservation
+    /**
+     * @return Collection<int, Reservation>
+     */
+    public function getReservations(): Collection
     {
         return $this->reservations;
     }
 
-    public function setReservations(?Reservation $reservations): self
+    public function addReservation(Reservation $reservation): self
     {
-        $this->reservations = $reservations;
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations[] = $reservation;
+            $reservation->setPassager($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): self
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            // set the owning side to null (unless already changed)
+            if ($reservation->getPassager() === $this) {
+                $reservation->setPassager(null);
+            }
+        }
 
         return $this;
     }

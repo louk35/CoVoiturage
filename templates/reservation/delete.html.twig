@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+	<div class="alert alert-danger">
+		<strong>Avertissement !</strong>
+		Vous êtes en train de supprimer le trajet suivant :
+		<ul>
+			<li>
+				<strong>Lieu de départ :
+				</strong>
+				{{ reservation.trajet.lieuDepart }}</li>
+			<li>
+				<strong>Lieu d'arrivée :
+				</strong>
+				{{ reservation.trajet.lieuArrive }}</li>
+			<li>
+				<strong>Date de déoart  :
+				</strong>
+				{{ reservation.trajet.dateDepart.format('Y-m-d H:i:s')}}</li>
+			<li>
+				<strong>Date d'arrivée :
+				</strong>
+				{{ reservation.trajet.dateArrive.format('Y-m-d H:i:s')}}</li>
+			<li>
+				<strong>Date de publication :
+				</strong>
+				{{ reservation.trajet.dateCreation|date('m/d/Y') }}</li>
+		</ul>
+	</div>
+	<div class="collapse navbar-collapse">
+		{{ form_start(form, {'attr': {'class': 'navbar-form navbar-left'}}) }}
+		{{ form_widget(form) }}
+		<a href="{{ path('mes.reservations') }}" class="btn btn-success" role="button">
+			<span class="glyphicon glyphicon-off" aria-hidden="true"></span>Annuler</a>
+		<button type="submit" class="btn btn-danger" onclick="return confirm('Êtes vous sûr ??')">
+			<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+			Supprimer
+		</button>
+		{{ form_end(form) }}
+	</div>
+{% endblock %}
