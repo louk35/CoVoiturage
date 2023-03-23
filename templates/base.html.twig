@@ -24,18 +24,18 @@
 							<div>
 								<a class="navbar-brand" href="{{ path('trajet.list') }}">Trajets</a>
 								<a href="{{ path('trajet.create') }}" class="btn btn-default navbar-btn">Créer un trajet</a>
-								<a class="navbar-brand" href="{{ path('mes.trajets') }}">Mes Trajets-créer</a>
+								<a class="navbar-brand" href="{{ path('mes.trajets') }}">Mes annonces</a>
 							</div>
 							{% if not app.user %}
-						<li>
-							<a href="{{ path('app_login') }}">Connexion</a>
-						</li>
-						{% endif %}
-						{% if app.user %}
-							<li>
-								<a href="{{ path('app_logout') }}">Déconnexion</a>
-							</li>
-						{% endif %}
+								<li>
+									<a href="{{ path('app_login') }}">Connexion</a>
+								</li>
+							{% endif %}
+							{% if app.user %}
+								<li>
+									<a href="{{ path('app_logout') }}">Déconnexion</a>
+								</li>
+							{% endif %}
 						</li>
 					</ul>
 				</div>

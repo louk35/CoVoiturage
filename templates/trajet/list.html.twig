@@ -1,7 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<h1> Tous les trajets existant ! </h1>
+	<h1>
+		Tous les trajets existant !
+	</h1>
 	<table class="table text-center">
 		<tr>
 			<th class="active text-center">Lieu départ</th>
@@ -9,6 +11,7 @@
 			<th class="active text-center">Date départ</th>
 			<th class="active text-center">Date arrivé</th>
 			<th class="active text-center">prix</th>
+			<th class="active text-center"></th>
 		</tr>
 
 		{% for trajet in trajets %}
@@ -26,9 +29,14 @@
 					{{ trajet.dateArrive.format('Y-m-d H:i:s') }}
 				</td>
 				<td>
-					<a href="{{ path('trajet.show', {id: trajet.id}) }}">
-						<div style="height:100%;width:100%">{{ trajet.prix }}</div>
-					</a>
+
+					<div style="height:100%;width:100%">{{ trajet.prix }}</div>
+
+				</td>
+				<td>
+					<a href="{{ path('trajet.show', {id: trajet.id}) }}" class="btn btn-info ">
+						<i class="fas fa-edit"></i>
+						Plus de détail</a>
 				</td>
 			</tr>
 		{% endfor %}

@@ -19,11 +19,14 @@
 
 				<p>{{ trajet.description|nl2br }}</p>
 				<p>
-					<strong>Publié par :</strong> {{ trajet.conducteur.nom }}  {{ trajet.conducteur.prenom }}
+					<strong>Publié par :</strong>
+					{{ trajet.conducteur.nom }}
+					{{ trajet.conducteur.prenom }}
 				</p>
 
 				<p>
-					<strong>Email de contact :</strong> {{ trajet.conducteur.email }}
+					<strong>Email de contact :</strong>
+					{{ trajet.conducteur.email }}
 				</p>
 				<p>
 					<strong>Date de départ :</strong>
@@ -31,7 +34,7 @@
 				</p>
 				<p>
 					<strong>Arrivée prévu :</strong>
-					{{ trajet.dateDepart.format('Y-m-d H:i:s')}}
+					{{ trajet.dateArrive.format('Y-m-d H:i:s')}}
 				</p>
 				<p>
 					<strong>Covoitureur(s):
@@ -49,10 +52,14 @@
 									Réserver
 								</a>
 								{% if app.user is not null %}
-								{% if app.user.id == trajet.conducteur.id %}
-									<a href="{{ path('mes.trajets.edit', {id: trajet.id}) }}" class="btn btn-info "><i class="fas fa-edit"></i> Modifier</a>
-									<a href="{{ path('mes.trajets.delete', {id: trajet.id}) }}" class="btn btn-danger"><i class="fas fa-trash"></i> Supprimer</a>
-								{% endif %}
+									{% if app.user.id == trajet.conducteur.id %}
+										<a href="{{ path('mes.trajets.edit', {id: trajet.id}) }}" class="btn btn-info ">
+											<i class="fas fa-edit"></i>
+											Modifier</a>
+										<a href="{{ path('mes.trajets.delete', {id: trajet.id}) }}" class="btn btn-danger">
+											<i class="fas fa-trash"></i>
+											Supprimer</a>
+									{% endif %}
 								{% endif %}
 
 							</div>

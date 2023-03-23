@@ -57,7 +57,7 @@ class TrajetController extends AbstractController
      * Require ROLE_USER for  method create in this class
      * @IsGranted("ROLE_USER")
      */
-    public function edit(Request $request, Trajet $trajet, EntityManagerInterface $em) : Response
+    public function edit(Request $request, Trajet $trajet, EntityManagerInterface $em): Response
     {
         $form = $this->createForm(TrajetType::class, $trajet);
         $form->handleRequest($request);
@@ -81,14 +81,14 @@ class TrajetController extends AbstractController
      * Require ROLE_USER for  method create in this class
      * @IsGranted("ROLE_USER")
      */
-    public function delete(Request $request, Trajet $trajet, EntityManagerInterface $em) : Response
+    public function delete(Request $request, Trajet $trajet, EntityManagerInterface $em): Response
     {
         $form = $this->createFormBuilder()
-        ->setAction($this->generateUrl('mes.trajets.delete', ['id' => $trajet->getId()]))
-        ->getForm();
+            ->setAction($this->generateUrl('mes.trajets.delete', ['id' => $trajet->getId()]))
+            ->getForm();
         $form->handleRequest($request);
-        if ( ! $form->isSubmitted() || ! $form->isValid()) {
-                return $this->render('trajet/delete.html.twig', [
+        if (!$form->isSubmitted() || !$form->isValid()) {
+            return $this->render('trajet/delete.html.twig', [
                 'trajet' => $trajet,
                 'form' => $form->createView(),
             ]);
@@ -111,34 +111,34 @@ class TrajetController extends AbstractController
             'trajet' => $trajet,
         ]);
     }
-/**
- * Créer un nouveau trajet.
- * @Route("/nouveau-trajet", name="trajet.create")
- * @param Request $request
- * @param EntityManagerInterface $em
- * @param Security $security
- * @return RedirectResponse|Response
- * Require ROLE_USER for  method create in this class
- * @IsGranted("ROLE_USER")
- */
-public function create(Request $request, EntityManagerInterface $em, Security $security) : Response
-{
-    $trajet = new Trajet();
-    $form = $this->createForm(TrajetType::class, $trajet);
-    $form->handleRequest($request);
-    if ($form->isSubmitted() && $form->isValid()) {
-        $user = $security->getUser();
-        if ($user) {
-            $trajet->setConducteur($user);
+    /**
+     * Créer un nouveau trajet.
+     * @Route("/nouveau-trajet", name="trajet.create")
+     * @param Request $request
+     * @param EntityManagerInterface $em
+     * @param Security $security
+     * @return RedirectResponse|Response
+     * Require ROLE_USER for  method create in this class
+     * @IsGranted("ROLE_USER")
+     */
+    public function create(Request $request, EntityManagerInterface $em, Security $security): Response
+    {
+        $trajet = new Trajet();
+        $form = $this->createForm(TrajetType::class, $trajet);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user = $security->getUser();
+            if ($user) {
+                $trajet->setConducteur($user);
+            }
+            $em->persist($trajet);
+            $em->flush();
+            return $this->redirectToRoute('mes.trajets');
         }
-        $em->persist($trajet);
-        $em->flush();
-        return $this->redirectToRoute('mes.trajets');
+        return $this->render('trajet/create.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
-    return $this->render('trajet/create.html.twig', [
-        'form' => $form->createView(),
-    ]);
-}
     /**
      * page d'accueil.
      * @param Request $request
@@ -146,7 +146,7 @@ public function create(Request $request, EntityManagerInterface $em, Security $s
      * @return RedirectResponse|Response
      * @Route("/", name="trajet.search")
      */
-    public function search(Request $request, EntityManagerInterface $em) : Response
+    public function search(Request $request, EntityManagerInterface $em): Response
     {
         $trajet = new Trajet();
         $form = $this->createForm(RechercheType::class, $trajet);
@@ -156,18 +156,17 @@ public function create(Request $request, EntityManagerInterface $em, Security $s
         if ($form->isSubmitted() && $form->isValid()) {
             $lieuDepart = $trajet->getLieuDepart();
             $lieuArrive = $trajet->getLieuArrive();
-            $dateDepart =$trajet->getDateDepart();
+            $dateDepart = $trajet->getDateDepart();
 
             if (($lieuDepart != "") && ($lieuArrive != "") && ($dateDepart != "")) {
                 $trajets = $this->getDoctrine()->getRepository(Trajet::class)->findByDate($lieuDepart, $lieuArrive, $dateDepart);
                 return $this->render('trajet/search_results.html.twig', [
-                    'trajets' => $trajets,]);
+                    'trajets' => $trajets,
+                ]);
             }
         }
         return $this->render('trajet/search.html.twig', [
             'form' => $form->createView(),
         ]);
     }
-
-
 }

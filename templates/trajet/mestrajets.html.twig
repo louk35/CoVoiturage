@@ -1,36 +1,51 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<h1> Voici vos trajets ! </h1>
-    <table class="table text-center">
-        <tr>
-            <th class="active text-center">Lieu départ</th>
-            <th class="active text-center">Lieu arrivé</th>
-            <th class="active text-center">Date départ</th>
-            <th class="active text-center">Date arrivé</th>
-            <th class="active text-center">prix</th>
-        </tr>
+	{% if trajets is not empty %}
+		<h1>
+			Voici vos trajets !
+		</h1>
+		<table class="table text-center">
+			<tr>
+				<th class="active text-center">Lieu départ</th>
+				<th class="active text-center">Lieu arrivé</th>
+				<th class="active text-center">Date départ</th>
+				<th class="active text-center">Date arrivé</th>
+				<th class="active text-center">prix</th>
+			</tr>
 
-        {% for trajet in trajets %}
-            <tr>
-                <td>
-                    {{ trajet.lieuDepart }}
-                </td>
-                <td>
-                    {{ trajet.lieuArrive }}
-                </td>
-                <td>
-                    {{ trajet.dateDepart.format('Y-m-d H:i:s') }}
-                </td>
-                <td>
-                    {{ trajet.dateArrive.format('Y-m-d H:i:s') }}
-                </td>
-                <td>
-                    <a href="{{ path('trajet.show', {id: trajet.id}) }}">
-                        <div style="height:100%;width:100%">{{ trajet.prix }}</div>
-                    </a>
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
+			{% for trajet in trajets %}
+				<tr>
+					<td>
+						{{ trajet.lieuDepart }}
+					</td>
+					<td>
+						{{ trajet.lieuArrive }}
+					</td>
+					<td>
+						{{ trajet.dateDepart.format('Y-m-d H:i:s') }}
+					</td>
+					<td>
+						{{ trajet.dateArrive.format('Y-m-d H:i:s') }}
+					</td>
+					<td>
+						<a href="{{ path('trajet.show', {id: trajet.id}) }}">
+							<div style="height:100%;width:100%">{{ trajet.prix }}</div>
+						</a>
+					</td>
+				</tr>
+			{% endfor %}
+		</table>
+
+	{% else %}
+		<h1>
+			Pas encore d'annonce publier
+		</h1>
+		<a href="{{ path('trajet.create') }}" class="btn btn-primary">
+			<p>
+				Créer là maintenant !
+			</p>
+		</a>
+
+	{% endif %}
 {% endblock %}
