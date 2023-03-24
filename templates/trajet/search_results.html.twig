@@ -9,6 +9,7 @@
 				<th class="active text-center">Date départ</th>
 				<th class="active text-center">Date arrivé</th>
 				<th class="active text-center">prix</th>
+				<th class="active text-center"></th>
 			</tr>
 			{% if trajets |length >0 %}
 				{% for trajet in trajets %}
@@ -29,6 +30,11 @@
 							<a href="{{ path('trajet.show', {id: trajet.id}) }}">
 								<div style="height:100%;width:100%">{{ trajet.prix }}</div>
 							</a>
+						</td>
+						<td>
+							<a href="{{ path('trajet.show', {id: trajet.id}) }}" class="btn btn-info ">
+								<i class="fas fa-edit"></i>
+								Plus de détail</a>
 						</td>
 					</tr>
 				{% endfor %}

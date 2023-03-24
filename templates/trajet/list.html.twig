@@ -1,46 +1,57 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
- <div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
-	<h1>
-		Tous les trajets existant !
-	</h1>
-	<table class="table text-center table-dark">
-		<tr>
-			<th class="active text-center">Lieu départ</th>
-			<th class="active text-center">Lieu arrivé</th>
-			<th class="active text-center">Date départ</th>
-			<th class="active text-center">Date arrivé</th>
-			<th class="active text-center">prix</th>
-			<th class="active text-center"></th>
-		</tr>
-
-		{% for trajet in trajets %}
+	<div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
+		<h1>
+			Tous les trajets existant !
+		</h1>
+		<table class="table text-center table-dark">
 			<tr>
-				<td>
-					{{ trajet.lieuDepart }}
-				</td>
-				<td>
-					{{ trajet.lieuArrive }}
-				</td>
-				<td>
-					{{ trajet.dateDepart.format('Y-m-d H:i:s') }}
-				</td>
-				<td>
-					{{ trajet.dateArrive.format('Y-m-d H:i:s') }}
-				</td>
-				<td>
-
-					<div style="height:100%;width:100%">{{ trajet.prix }}</div>
-
-				</td>
-				<td>
-					<a href="{{ path('trajet.show', {id: trajet.id}) }}" class="btn btn-info ">
-						<i class="fas fa-edit"></i>
-						Plus de détail</a>
-				</td>
+				<th class="active text-center">Lieu départ</th>
+				<th class="active text-center">Lieu arrivé</th>
+				<th class="active text-center">Date départ</th>
+				<th class="active text-center">Date arrivé</th>
+				<th class="active text-center">prix</th>
+				<th class="active text-center"></th>
+				{% if app.user and is_granted('ROLE_ADMIN') %}
+					<th class="active text-center"></th>
+				{% endif %}
 			</tr>
-		{% endfor %}
-	</table>
+
+			{% for trajet in trajets %}
+				<tr>
+					<td>
+						{{ trajet.lieuDepart }}
+					</td>
+					<td>
+						{{ trajet.lieuArrive }}
+					</td>
+					<td>
+						{{ trajet.dateDepart.format('Y-m-d H:i:s') }}
+					</td>
+					<td>
+						{{ trajet.dateArrive.format('Y-m-d H:i:s') }}
+					</td>
+					<td>
+
+						<div style="height:100%;width:100%">{{ trajet.prix }}</div>
+
+					</td>
+					<td>
+						<a href="{{ path('trajet.show', {id: trajet.id}) }}" class="btn btn-info ">
+							<i class="fas fa-edit"></i>
+							Plus de détail</a>
+					</td>
+
+					{% if app.user and is_granted('ROLE_ADMIN') %}
+						<td>
+							<a href="{{ path('mes.trajets.delete', {id: trajet.id}) }}" class="btn btn-danger">
+								<i class="fas fa-trash"></i>
+								Supprimer</a>
+						</td>
+					{% endif %}
+				</tr>
+			{% endfor %}
+		</table>
 	</div>
 {% endblock %}

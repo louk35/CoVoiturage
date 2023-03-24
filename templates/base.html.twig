@@ -10,11 +10,10 @@
 
 		<style>
 
-		body {
-			background-color: #E8E8E8;
-		}
-
-</style>
+			body {
+				background-color: #E8E8E8;
+			}
+		</style>
 	</head>
 	<body class="bg-">
 		<nav class="navbar navbar-inverse">
@@ -22,20 +21,29 @@
 				<div class="navbar-header">
 
 					<a class="navbar-brand" href="{{ path('trajet.search') }}">CoVoit'</a>
+
 				</div>
 
 				<div class="collapse navbar-collapse">
 					<ul class="nav navbar-nav navbar-right">
 						<li>
 							<div>
+								<a class="navbar-brand">
+									{% if app.user and is_granted('ROLE_ADMIN') %}
+										<p>ADMIN</p>
+									{% endif %}
+									{% if app.user %}
+										<p>User</p>
+									{% endif %}
+								</a>
 								<a class="navbar-brand" href="{{ path('trajet.list'|trans) }}">Trajets</a>
 								<a href="{{ path('trajet.create'|trans) }}" class="btn btn-success navbar-btn">Créer un trajet</a>
 								<a class="navbar-brand" href="{{ path('mes.reservations'|trans) }}">Mes réservations</a>
 								<a class="navbar-brand" href="{{ path('mes.trajets'|trans) }}">Mes Annonces</a>
-															</div>
+							</div>
 							{% if not app.user %}
 								<li>
-									<a class="btn btn-secondary"href="{{ path('app_login'|trans) }}">Connexion</a>
+									<a class="btn btn-secondary" href="{{ path('app_login'|trans) }}">Connexion</a>
 								</li>
 							{% endif %}
 							{% if app.user %}

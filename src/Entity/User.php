@@ -74,7 +74,6 @@ class User implements UserInterface
     {
         $this->trajets = new ArrayCollection();
         $this->reservations = new ArrayCollection();
-       
     }
 
     public function getId(): ?int
@@ -265,5 +264,4 @@ class User implements UserInterface
 
         return $this;
     }
-
 }

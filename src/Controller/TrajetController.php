@@ -71,6 +71,45 @@ class TrajetController extends AbstractController
         ]);
     }
     /**
+     * Éditer un trajet à vous.
+     * @Route("mes-trajets/{id}/clone", name="mes.trajets.clone")
+     * @return Response
+     * @param Request $request
+     * @param Security $security
+     * @param EntityManagerInterface $em
+     * @return RedirectResponse|Response
+     * Require ROLE_USER for  method create in this class
+     * @IsGranted("ROLE_USER")
+     */
+    public function clone(Request $request, Security $security, Trajet $trajet, EntityManagerInterface $em): Response
+    {
+        $newTrajet = new Trajet();
+        $newTrajet->setLieuDepart($trajet->getLieuDepart());
+        $newTrajet->setLieuArrive($trajet->getLieuArrive());
+        $newTrajet->setDateDepart($trajet->getDateDepart());
+        $newTrajet->setDateArrive($trajet->getDateArrive());
+        $newTrajet->setNbPlace($trajet->getNbPlace());
+        $newTrajet->setModelVoiture($trajet->getModelVoiture());
+        $newTrajet->setDescription($trajet->getDescription());
+        $newTrajet->setPrix($trajet->getPrix());
+
+
+        $form = $this->createForm(TrajetType::class, $newTrajet);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user = $security->getUser();
+            if ($user) {
+                $newTrajet->setConducteur($user);
+            }
+            $em->persist($newTrajet);
+            $em->flush();
+            return $this->redirectToRoute('mes.trajets');
+        }
+        return $this->render('trajet/create.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+    /**
      * Supprimer un trajet à vous.
      * @Route("mes-trajets/{id}/delete", name="mes.trajets.delete")
      * @return Response
@@ -81,6 +120,7 @@ class TrajetController extends AbstractController
      * @return RedirectResponse|Response
      * Require ROLE_USER for  method create in this class
      * @IsGranted("ROLE_USER")
+     *
      */
     public function delete(Request $request, Trajet $trajet, EntityManagerInterface $em): Response
     {

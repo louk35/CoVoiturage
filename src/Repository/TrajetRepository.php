@@ -60,13 +60,13 @@ class TrajetRepository extends ServiceEntityRepository
     }
 
     /**
-    * @return Trajet[] Returns an array of Trajet objects
+     * @return Trajet[] Returns an array of Trajet objects
     //  */
 
-    public function findByDate($lieuDepart,$lieuArrive,$dateDepart)
+    public function findByDate($lieuDepart, $lieuArrive, $dateDepart)
     {
         return $this->createQueryBuilder('covoiturage')
-            ->andWhere('covoiturage.dateDepart <= :dateDepart')
+            ->andWhere('covoiturage.dateDepart >= :dateDepart')
             ->setParameter('dateDepart', $dateDepart)
             ->andWhere('covoiturage.lieuDepart = :lieuDepart')
             ->setParameter('lieuDepart', $lieuDepart)
@@ -75,8 +75,7 @@ class TrajetRepository extends ServiceEntityRepository
             ->orderBy('covoiturage.id', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
 
